@@ -15,9 +15,9 @@ Resources:
     Properties:
       Name: !Ref Name
       StageName: live
-      OpenApiVersion: 3.0.1
+      OpenApiVersion: 3.0.3
       DefinitionBody: 
-        openapi: 3.0.1
+        openapi: 3.0.3
         info:
           title: Hello World API
           description: This is a swagger example.
