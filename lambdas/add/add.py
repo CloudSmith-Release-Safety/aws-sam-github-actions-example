@@ -12,7 +12,11 @@ def lambda_handler(event, context):
    
    print(f"FIRST: {first}, SECOND: {second}, THIRD: {third}")
    
-   result = int(result) + int(second)
+   try:
+    result = int(first) + int(second) + int(third)
+except ValueError:
+    print("Error: Input values must be numeric")
+    return {"error": "Invalid input: all values must be numeric"}
    
    print(f"RESULT: {result}")
    
