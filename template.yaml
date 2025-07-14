@@ -55,9 +55,11 @@ Resources:
       Handler: add.lambda_handler
       Runtime: python3.8
       CodeUri: ./lambdas/add
-      Description: Add
+      Description: Add with increased memory and timeout
       AutoPublishAlias: live
-
+      MemorySize: 256  # increase the memory size
+      Timeout: 30      # add timeout setting
+      
   CleanInputLambdaFunction:
     Type: AWS::Serverless::Function
     Properties:
