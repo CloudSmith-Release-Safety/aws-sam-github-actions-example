@@ -12,7 +12,7 @@ def lambda_handler(event, context):
 
    print(f"FIRST: {first}, SECOND: {second}, THIRD: {third}")
    
-   result = int(first) * int(second) * int(third)
+   result = int(first) * int(second) 
    
    print(f"RESULT: {result}")
    
