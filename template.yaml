@@ -53,10 +53,12 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Handler: add.lambda_handler
-      Runtime: python3.8
+      Runtime: python3.9
       CodeUri: ./lambdas/add
       Description: Add
       AutoPublishAlias: live
+      MemorySize: 256
+      Timeout: 30
 
   CleanInputLambdaFunction:
     Type: AWS::Serverless::Function
