@@ -60,6 +60,46 @@ Resources:
                 httpMethod: POST
                 contentHandling: CONVERT_TO_TEXT
                 type: aws_proxy
+          /matrix:
+            post:
+              summary: matrix operations
+              description: |
+                Performs memory-optimized matrix operations (multiply, transpose, determinant).
+              requestBody:
+                required: true
+                content:
+                  application/json:
+                    schema:
+                      type: object
+                      properties:
+                        operation:
+                          type: string
+                          enum: [multiply, transpose, determinant]
+                          description: Matrix operation to perform
+                        size:
+                          type: integer
+                          minimum: 1
+                          maximum: 500
+                          description: Matrix size (NxN)
+              responses:
+                "200":
+                  description: Matrix operation completed successfully
+                "400":
+                  description: Invalid parameters
+                "507":
+                  description: Insufficient memory
+                "500":
+                  description: Internal server error
+              x-amazon-apigateway-integration:
+                uri:
+                  Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${MatrixLambdaFunction.Arn}/invocations
+                responses:
+                  default:
+                    statusCode: "200"
+                passthroughBehavior: when_no_match
+                httpMethod: POST
+                contentHandling: CONVERT_TO_TEXT
+                type: aws_proxy
 
   AddLambdaFunction:
     Type: AWS::Serverless::Function
@@ -105,6 +145,27 @@ Resources:
       CodeUri: ./lambdas/subtract
       Description: Subtract
       AutoPublishAlias: live
+
+  MatrixLambdaFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: matrix.lambda_handler
+      Runtime: python3.8
+      CodeUri: ./lambdas/matrix
+      Description: Memory-Optimized Matrix Operations
+      MemorySize: 512
+      Timeout: 30
+      AutoPublishAlias: live
+      Environment:
+        Variables:
+          PYTHONHASHSEED: 0
+      Events:
+        MatrixApi:
+          Type: Api
+          Properties:
+            RestApiId: !Ref Api
+            Path: /matrix
+            Method: post
 
   StateMachine:
     Type: AWS::Serverless::StateMachine
