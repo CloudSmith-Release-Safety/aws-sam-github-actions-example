@@ -10,6 +10,18 @@ Parameters:
 
 Resources:
 
+  CommonDependenciesLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      LayerName: !Sub ${AWS::StackName}-common-dependencies
+      Description: Common dependencies for Lambda functions
+      ContentUri: layers/common-deps/
+      CompatibleRuntimes:
+        - python3.8
+        - python3.9
+        - python3.10
+      RetentionPolicy: Retain
+
   Api:
     Type: AWS::Serverless::Api
     Properties:
