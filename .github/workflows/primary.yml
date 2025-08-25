@@ -18,9 +18,13 @@ jobs:
         run: |
           pip3 install pytest
       - name: SAM Validate
+        env:
+          AWS_DEFAULT_REGION: us-east-1
         run: |
           sam validate
       - name: SAM Build
+        env:
+          AWS_DEFAULT_REGION: us-east-1
         run: |
           sam build
       - name: Run unit tests
