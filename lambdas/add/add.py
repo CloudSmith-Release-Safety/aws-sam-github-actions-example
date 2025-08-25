@@ -1,35 +1,60 @@
 import json
 import os
 from datetime import datetime
+import boto3
+from pydantic import BaseModel, ValidationError
+from typing import Optional
+
+# Global variables for connection reuse
+REGION = os.environ.get('AWS_REGION', 'unknown')
+
+class CalculationInput(BaseModel):
+    first: int
+    second: int
+    third: int
+    result: Optional[int] = None
+
+class CalculationResponse(BaseModel):
+    first: int
+    second: int
+    third: int
+    result: int
+    metadata: dict
 
 def lambda_handler(event, context):
-    print("Function invoked with event:", event)
-    # Get calculation parameters from input
-    first = event['input']['first']
-    second = event['input']['second']
-    third = event['input']['third']
-    result = event['input']['result']
-    
-    print(f"FIRST: {first}, SECOND: {second}, THIRD: {third}")
-    
-    # Perform calculation
-    result = int(result) + int(second)
-    
-    print(f"RESULT: {result}")
-    
-    # Enhanced response with metadata
-    response = {
-        "first": first,
-        "second": second,
-        "third": third,
-        "result": int(result),
-        "metadata": {
-            "timestamp": datetime.now().isoformat(),
-            "region": os.environ.get('AWS_REGION', 'unknown'),
-            "calculation_type": "addition"
+    try:
+        # Validate input using Pydantic
+        input_data = event.get('input', {})
+        calc_input = CalculationInput(**input_data)
+        
+        # Perform calculation
+        result = (calc_input.result or 0) + calc_input.second
+        
+        # Enhanced response with metadata using Pydantic
+        response = CalculationResponse(
+            first=calc_input.first,
+            second=calc_input.second,
+            third=calc_input.third,
+            result=result,
+            metadata={
+                "timestamp": datetime.now().isoformat(),
+                "region": REGION,
+                "calculation_type": "addition",
+                "function_version": context.function_version if context else "unknown"
+            }
+        )
+        
+        event['input'] = response.dict()
+        return event['input']
+        
+    except ValidationError as e:
+        return {
+            "error": f"Invalid input format: {e}",
+            "statusCode": 400
         }
-    }
-    
-    event['input'] = response
-    return event['input']
+    except Exception as e:
+        return {
+            "error": str(e),
+            "statusCode": 500
+        }
 

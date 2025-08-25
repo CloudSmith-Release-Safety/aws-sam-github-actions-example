@@ -10,10 +10,22 @@ Parameters:
 
 Resources:
 
+  CommonDependenciesLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      LayerName: !Sub ${AWS::StackName}-common-dependencies
+      Description: Common dependencies for Lambda functions
+      ContentUri: layers/common-deps/
+      CompatibleRuntimes:
+        - python3.8
+        - python3.9
+        - python3.10
+      RetentionPolicy: Retain
+
   Api:
     Type: AWS::Serverless::Api
     Properties:
-      Name: !Ref Name
+      Name: CalculatorAPI
       StageName: live
       OpenApiVersion: 3.0.1
       DefinitionBody: 
@@ -53,46 +65,71 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Handler: add.lambda_handler
-      Runtime: python3.8
+      Runtime: python3.9
       CodeUri: ./lambdas/add
       Description: Add
       AutoPublishAlias: live
+      Layers:
+        - !Ref CommonDependenciesLayer
+      ReservedConcurrencyLimit: 100
+      MemorySize: 256
+      Timeout: 30
 
   CleanInputLambdaFunction:
     Type: AWS::Serverless::Function
     Properties:
       Handler: cleaninput.lambda_handler
-      Runtime: python3.8
+      Runtime: python3.9
       CodeUri: ./lambdas/cleaninput
       Description: Clean Input
       AutoPublishAlias: live
+      Layers:
+        - !Ref CommonDependenciesLayer
+      ReservedConcurrencyLimit: 100
+      MemorySize: 256
+      Timeout: 30
 
   DivideLambdaFunction:
     Type: AWS::Serverless::Function
     Properties:
       Handler: divide.lambda_handler
-      Runtime: python3.8
+      Runtime: python3.9
       CodeUri: ./lambdas/divide
       Description: Divide
       AutoPublishAlias: live
+      Layers:
+        - !Ref CommonDependenciesLayer
+      ReservedConcurrencyLimit: 100
+      MemorySize: 256
+      Timeout: 30
 
   MultiplyLambdaFunction:
     Type: AWS::Serverless::Function
     Properties:
       Handler: multiply.lambda_handler
-      Runtime: python3.8
+      Runtime: python3.9
       CodeUri: ./lambdas/multiply
       Description: Multiply
       AutoPublishAlias: live
+      Layers:
+        - !Ref CommonDependenciesLayer
+      ReservedConcurrencyLimit: 100
+      MemorySize: 256
+      Timeout: 30
 
   SubtractLambdaFunction:
     Type: AWS::Serverless::Function
     Properties:
       Handler: subtract.lambda_handler
-      Runtime: python3.8
+      Runtime: python3.9
       CodeUri: ./lambdas/subtract
       Description: Subtract
       AutoPublishAlias: live
+      Layers:
+        - !Ref CommonDependenciesLayer
+      ReservedConcurrencyLimit: 100
+      MemorySize: 256
+      Timeout: 30
   
   StateMachine:
     Type: AWS::Serverless::StateMachine
