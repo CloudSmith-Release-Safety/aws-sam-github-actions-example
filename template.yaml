@@ -53,46 +53,61 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Handler: add.lambda_handler
-      Runtime: python3.8
+      Runtime: python3.9
       CodeUri: ./lambdas/add
       Description: Add
       AutoPublishAlias: live
+      ReservedConcurrencyLimit: 100
+      MemorySize: 256
+      Timeout: 30
 
   CleanInputLambdaFunction:
     Type: AWS::Serverless::Function
     Properties:
       Handler: cleaninput.lambda_handler
-      Runtime: python3.8
+      Runtime: python3.9
       CodeUri: ./lambdas/cleaninput
       Description: Clean Input
       AutoPublishAlias: live
+      ReservedConcurrencyLimit: 100
+      MemorySize: 256
+      Timeout: 30
 
   DivideLambdaFunction:
     Type: AWS::Serverless::Function
     Properties:
       Handler: divide.lambda_handler
-      Runtime: python3.8
+      Runtime: python3.9
       CodeUri: ./lambdas/divide
       Description: Divide
       AutoPublishAlias: live
+      ReservedConcurrencyLimit: 100
+      MemorySize: 256
+      Timeout: 30
 
   MultiplyLambdaFunction:
     Type: AWS::Serverless::Function
     Properties:
       Handler: multiply.lambda_handler
-      Runtime: python3.8
+      Runtime: python3.9
       CodeUri: ./lambdas/multiply
       Description: Multiply
       AutoPublishAlias: live
+      ReservedConcurrencyLimit: 100
+      MemorySize: 256
+      Timeout: 30
 
   SubtractLambdaFunction:
     Type: AWS::Serverless::Function
     Properties:
       Handler: subtract.lambda_handler
-      Runtime: python3.8
+      Runtime: python3.9
       CodeUri: ./lambdas/subtract
       Description: Subtract
       AutoPublishAlias: live
+      ReservedConcurrencyLimit: 100
+      MemorySize: 256
+      Timeout: 30
 
   StateMachine:
     Type: AWS::Serverless::StateMachine
