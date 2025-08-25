@@ -60,6 +60,120 @@ Resources:
                 httpMethod: POST
                 contentHandling: CONVERT_TO_TEXT
                 type: aws_proxy
+          /user/profile:
+            post:
+              summary: create user profile
+              description: |
+                Creates a new user profile with name and email.
+              requestBody:
+                required: true
+                content:
+                  application/json:
+                    schema:
+                      type: object
+                      required:
+                        - name
+                        - email
+                      properties:
+                        name:
+                          type: string
+                          description: User's full name
+                        email:
+                          type: string
+                          format: email
+                          description: User's email address
+              responses:
+                "201":
+                  description: User profile created successfully
+                "400":
+                  description: Invalid input parameters
+                "500":
+                  description: Internal server error
+              x-amazon-apigateway-integration:
+                uri:
+                  Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${UserProfileLambdaFunction.Arn}/invocations
+                responses:
+                  default:
+                    statusCode: "200"
+                passthroughBehavior: when_no_match
+                httpMethod: POST
+                contentHandling: CONVERT_TO_TEXT
+                type: aws_proxy
+          /user/profile/{userId}:
+            get:
+              summary: get user profile
+              description: |
+                Retrieves user profile by user ID.
+              parameters:
+                - name: userId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+                  description: User ID
+              responses:
+                "200":
+                  description: User profile retrieved successfully
+                "400":
+                  description: Invalid user ID
+                "404":
+                  description: User not found
+                "500":
+                  description: Internal server error
+              x-amazon-apigateway-integration:
+                uri:
+                  Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${UserProfileLambdaFunction.Arn}/invocations
+                responses:
+                  default:
+                    statusCode: "200"
+                passthroughBehavior: when_no_match
+                httpMethod: POST
+                contentHandling: CONVERT_TO_TEXT
+                type: aws_proxy
+            put:
+              summary: update user profile
+              description: |
+                Updates existing user profile with new information.
+              parameters:
+                - name: userId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+                  description: User ID
+              requestBody:
+                required: true
+                content:
+                  application/json:
+                    schema:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                          description: User's full name
+                        email:
+                          type: string
+                          format: email
+                          description: User's email address
+              responses:
+                "200":
+                  description: User profile updated successfully
+                "400":
+                  description: Invalid input parameters
+                "404":
+                  description: User not found
+                "500":
+                  description: Internal server error
+              x-amazon-apigateway-integration:
+                uri:
+                  Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${UserProfileLambdaFunction.Arn}/invocations
+                responses:
+                  default:
+                    statusCode: "200"
+                passthroughBehavior: when_no_match
+                httpMethod: POST
+                contentHandling: CONVERT_TO_TEXT
+                type: aws_proxy
 
   AddLambdaFunction:
     Type: AWS::Serverless::Function
@@ -105,6 +219,34 @@ Resources:
       CodeUri: ./lambdas/subtract
       Description: Subtract
       AutoPublishAlias: live
+
+  UserProfileLambdaFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: userprofile.lambda_handler
+      Runtime: python3.8
+      CodeUri: ./lambdas/userprofile
+      Description: User Profile Management
+      AutoPublishAlias: live
+      Events:
+        CreateProfile:
+          Type: Api
+          Properties:
+            RestApiId: !Ref Api
+            Path: /user/profile
+            Method: post
+        GetProfile:
+          Type: Api
+          Properties:
+            RestApiId: !Ref Api
+            Path: /user/profile/{userId}
+            Method: get
+        UpdateProfile:
+          Type: Api
+          Properties:
+            RestApiId: !Ref Api
+            Path: /user/profile/{userId}
+            Method: put
 
   StateMachine:
     Type: AWS::Serverless::StateMachine
