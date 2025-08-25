@@ -60,6 +60,44 @@ Resources:
                 httpMethod: POST
                 contentHandling: CONVERT_TO_TEXT
                 type: aws_proxy
+          /modulo:
+            post:
+              summary: calculate modulo
+              description: |
+                Calculates the remainder of division with enhanced logging and validation.
+              requestBody:
+                required: true
+                content:
+                  application/json:
+                    schema:
+                      type: object
+                      required:
+                        - dividend
+                        - divisor
+                      properties:
+                        dividend:
+                          type: number
+                          description: The number to be divided
+                        divisor:
+                          type: number
+                          description: The number to divide by
+              responses:
+                "200":
+                  description: Modulo operation completed successfully
+                "400":
+                  description: Invalid input parameters
+                "500":
+                  description: Internal server error
+              x-amazon-apigateway-integration:
+                uri:
+                  Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${ModuloLambdaFunction.Arn}/invocations
+                responses:
+                  default:
+                    statusCode: "200"
+                passthroughBehavior: when_no_match
+                httpMethod: POST
+                contentHandling: CONVERT_TO_TEXT
+                type: aws_proxy
 
   AddLambdaFunction:
     Type: AWS::Serverless::Function
@@ -105,6 +143,25 @@ Resources:
       CodeUri: ./lambdas/subtract
       Description: Subtract
       AutoPublishAlias: live
+
+  ModuloLambdaFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: modulo.lambda_handler
+      Runtime: python3.8
+      CodeUri: ./lambdas/modulo
+      Description: Modulo Operation with Enhanced Logging
+      AutoPublishAlias: live
+      Environment:
+        Variables:
+          LOG_LEVEL: INFO
+      Events:
+        ModuloApi:
+          Type: Api
+          Properties:
+            RestApiId: !Ref Api
+            Path: /modulo
+            Method: post
 
   StateMachine:
     Type: AWS::Serverless::StateMachine

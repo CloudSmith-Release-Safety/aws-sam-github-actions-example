@@ -1,0 +1,9 @@
+version = 0.1
+[default.deploy.parameters]
+stack_name = "aws-sam-github-actions-example"
+resolve_s3 = true
+s3_prefix = "aws-sam-github-actions-example"
+region = "us-west-2"
+capabilities = "CAPABILITY_IAM"
+parameter_overrides = "Name=\"github-actions-api\""
+image_repositories = []
