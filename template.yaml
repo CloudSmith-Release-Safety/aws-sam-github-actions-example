@@ -57,6 +57,12 @@ Resources:
       CodeUri: ./lambdas/add
       Description: Add
       AutoPublishAlias: live
+      MemorySize: 256
+      Timeout: 30
+      Environment:
+        Variables:
+          LOG_LEVEL: INFO
+          ENVIRONMENT: production
 
   CleanInputLambdaFunction:
     Type: AWS::Serverless::Function
@@ -66,6 +72,12 @@ Resources:
       CodeUri: ./lambdas/cleaninput
       Description: Clean Input
       AutoPublishAlias: live
+      MemorySize: 256
+      Timeout: 30
+      Environment:
+        Variables:
+          LOG_LEVEL: INFO
+          ENVIRONMENT: production
 
   DivideLambdaFunction:
     Type: AWS::Serverless::Function
@@ -75,6 +87,12 @@ Resources:
       CodeUri: ./lambdas/divide
       Description: Divide
       AutoPublishAlias: live
+      MemorySize: 256
+      Timeout: 30
+      Environment:
+        Variables:
+          LOG_LEVEL: INFO
+          ENVIRONMENT: production
 
   MultiplyLambdaFunction:
     Type: AWS::Serverless::Function
@@ -84,6 +102,12 @@ Resources:
       CodeUri: ./lambdas/multiply
       Description: Multiply
       AutoPublishAlias: live
+      MemorySize: 256
+      Timeout: 30
+      Environment:
+        Variables:
+          LOG_LEVEL: INFO
+          ENVIRONMENT: production
 
   SubtractLambdaFunction:
     Type: AWS::Serverless::Function
@@ -93,6 +117,12 @@ Resources:
       CodeUri: ./lambdas/subtract
       Description: Subtract
       AutoPublishAlias: live
+      MemorySize: 256
+      Timeout: 30
+      Environment:
+        Variables:
+          LOG_LEVEL: INFO
+          ENVIRONMENT: production
 
   StateMachine:
     Type: AWS::Serverless::StateMachine
