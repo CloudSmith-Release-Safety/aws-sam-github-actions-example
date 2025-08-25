@@ -10,22 +10,26 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Install Dependencies with Apt Get
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+      - name: Install Dependencies
         run: |
-          sudo apt-get update
-          sudo apt-get install python3.8 jq -y
-      - name: Install Pip Dependencies for CI
-        run: |
-          pip3 install pytest
+          pip install pytest
       - name: SAM Validate
+        env:
+          AWS_DEFAULT_REGION: us-east-1
         run: |
           sam validate
       - name: SAM Build
+        env:
+          AWS_DEFAULT_REGION: us-east-1
         run: |
           sam build
       - name: Run unit tests
         run: |
-          python3 -m pytest -s -vvv ./tests/unit/
+          python -m pytest -s -vvv ./tests/unit/
 
   deploy:
     runs-on: ubuntu-latest
