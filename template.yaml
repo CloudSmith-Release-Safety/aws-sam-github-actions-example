@@ -69,6 +69,7 @@ Resources:
       CodeUri: ./lambdas/add
       Description: Add
       AutoPublishAlias: live
+      ReservedConcurrencyLimit: 100
 
   CleanInputLambdaFunction:
     Type: AWS::Serverless::Function
@@ -78,6 +79,7 @@ Resources:
       CodeUri: ./lambdas/cleaninput
       Description: Clean Input
       AutoPublishAlias: live
+      ReservedConcurrencyLimit: 50
 
   DivideLambdaFunction:
     Type: AWS::Serverless::Function
@@ -87,6 +89,7 @@ Resources:
       CodeUri: ./lambdas/divide
       Description: Divide
       AutoPublishAlias: live
+      ReservedConcurrencyLimit: 50
 
   MultiplyLambdaFunction:
     Type: AWS::Serverless::Function
@@ -96,6 +99,7 @@ Resources:
       CodeUri: ./lambdas/multiply
       Description: Multiply
       AutoPublishAlias: live
+      ReservedConcurrencyLimit: 50
 
   SubtractLambdaFunction:
     Type: AWS::Serverless::Function
@@ -105,6 +109,7 @@ Resources:
       CodeUri: ./lambdas/subtract
       Description: Subtract
       AutoPublishAlias: live
+      ReservedConcurrencyLimit: 50
 
   StateMachine:
     Type: AWS::Serverless::StateMachine
