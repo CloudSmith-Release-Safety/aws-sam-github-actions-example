@@ -69,6 +69,11 @@ Resources:
       CodeUri: ./lambdas/add
       Description: Add
       AutoPublishAlias: live
+      Policies:
+        - S3ReadPolicy:
+            BucketName: !Sub "${AWS::StackName}-data-bucket"
+        - S3WritePolicy:
+            BucketName: !Sub "${AWS::StackName}-data-bucket"
 
   CleanInputLambdaFunction:
     Type: AWS::Serverless::Function
@@ -78,6 +83,9 @@ Resources:
       CodeUri: ./lambdas/cleaninput
       Description: Clean Input
       AutoPublishAlias: live
+      Policies:
+        - S3ReadPolicy:
+            BucketName: !Sub "${AWS::StackName}-data-bucket"
 
   DivideLambdaFunction:
     Type: AWS::Serverless::Function
@@ -87,6 +95,9 @@ Resources:
       CodeUri: ./lambdas/divide
       Description: Divide
       AutoPublishAlias: live
+      Policies:
+        - S3ReadPolicy:
+            BucketName: !Sub "${AWS::StackName}-data-bucket"
 
   MultiplyLambdaFunction:
     Type: AWS::Serverless::Function
@@ -96,6 +107,9 @@ Resources:
       CodeUri: ./lambdas/multiply
       Description: Multiply
       AutoPublishAlias: live
+      Policies:
+        - S3ReadPolicy:
+            BucketName: !Sub "${AWS::StackName}-data-bucket"
 
   SubtractLambdaFunction:
     Type: AWS::Serverless::Function
@@ -105,6 +119,9 @@ Resources:
       CodeUri: ./lambdas/subtract
       Description: Subtract
       AutoPublishAlias: live
+      Policies:
+        - S3ReadPolicy:
+            BucketName: !Sub "${AWS::StackName}-data-bucket"
 
   StateMachine:
     Type: AWS::Serverless::StateMachine
