@@ -69,6 +69,8 @@ Resources:
       CodeUri: ./lambdas/add
       Description: Add
       AutoPublishAlias: live
+      ProvisionedConcurrencyConfig:
+        ProvisionedConcurrencyExecutions: 10
 
   CleanInputLambdaFunction:
     Type: AWS::Serverless::Function
